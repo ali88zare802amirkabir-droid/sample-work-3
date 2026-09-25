@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   CheckCircle2,
   Layers,
@@ -40,7 +41,10 @@ export function ActivityRow({ id }: { id: string }) {
   const Icon = m.icon;
 
   return (
-    <div className="flex gap-3">
+    <Link
+      href={`/projects/${project.id}`}
+      className="group flex gap-3 rounded-lg transition-colors hover:bg-surface-2/60"
+    >
       <div className="relative flex flex-col items-center">
         <span
           className={cn(
@@ -58,9 +62,9 @@ export function ActivityRow({ id }: { id: string }) {
         </p>
         <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-ink-3">
           <Avatar name={actor.name} gradient={actor.gradient} size="xs" />
-          {timeAgo(item.at)} · {project.name}
+          {timeAgo(item.at)} · <span className="text-accent group-hover:underline">{project.name}</span>
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

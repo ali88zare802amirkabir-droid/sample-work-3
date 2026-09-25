@@ -202,7 +202,7 @@ export default function SettingsPage() {
               </div>
             </SectionCard>
 
-            <SectionCard title="Account" desc="Never build a real backend for a demo — this is a frontend showcase.">
+            <SectionCard title="Account" desc="Account management is simulated locally for this interactive demo.">
               <p className="text-[12.5px] leading-relaxed text-ink-2">
                 NexaBoard is a portfolio prototype. Sign-in, billing and real account
                 management are intentionally left out, so every pixel here works with

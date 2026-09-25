@@ -16,6 +16,10 @@ export function CurrentProject() {
   const projectTasks = tasks.filter((t) => t.projectId === project.id);
   const openTasks = projectTasks.filter((t) => t.status !== "done").length;
   const doneTasks = projectTasks.filter((t) => t.status === "done").length;
+  const donePoints = projectTasks
+    .filter((t) => t.status === "done")
+    .reduce((s, t) => s + (t.points ?? 0), 0);
+  const totalPoints = projectTasks.reduce((s, t) => s + (t.points ?? 0), 0);
   const due = dueLabel(project.due);
 
   return (
@@ -64,7 +68,7 @@ export function CurrentProject() {
               <span>
                 {doneTasks} done · {openTasks} left
               </span>
-              <span className="tabular-nums">26 / 32 points</span>
+              <span className="tabular-nums">{donePoints} / {totalPoints} points</span>
             </div>
           </div>
         </div>

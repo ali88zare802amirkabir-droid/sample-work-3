@@ -35,6 +35,9 @@ export default function ActivityPage() {
     activities.forEach((a) => {
       map[groupKey(a.at)].push(a);
     });
+    (Object.keys(map) as Array<keyof typeof map>).forEach((key) => {
+      map[key].sort((a, b) => b.at.localeCompare(a.at));
+    });
     return map;
   }, [activities]);
 

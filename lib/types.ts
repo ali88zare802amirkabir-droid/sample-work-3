@@ -55,6 +55,7 @@ export interface Project {
   due: string;
   lastUpdated: string;
   tag: string;
+  sprint: number[];
 }
 
 export type ActivityKind =

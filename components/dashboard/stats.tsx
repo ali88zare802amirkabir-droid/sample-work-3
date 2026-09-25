@@ -38,6 +38,7 @@ export function StatCards() {
   const open = tasks.filter((t) => t.status !== "done").length;
   const completed = tasks.filter((t) => t.status === "done").length;
   const inReview = tasks.filter((t) => t.status === "review").length;
+  const online = members.filter((m) => m.status === "online").length;
 
   const cards = [
     {
@@ -60,7 +61,7 @@ export function StatCards() {
     {
       label: "Team members",
       value: members.length,
-      sub: "3 currently online",
+      sub: `${online} currently online`,
       delta: "1 new member",
       icon: Users,
       spark: [4, 4, 5, 5, 6, 6, 7],

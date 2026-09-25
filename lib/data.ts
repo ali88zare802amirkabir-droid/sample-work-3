@@ -106,6 +106,7 @@ export const projects: Project[] = [
     due: day(21),
     lastUpdated: hoursAgo(2),
     tag: "Product",
+    sprint: [2, 4, 3, 5, 2, 4, 3],
   },
   {
     id: "p-vortex",
@@ -120,6 +121,7 @@ export const projects: Project[] = [
     due: day(9),
     lastUpdated: hoursAgo(26),
     tag: "Marketing",
+    sprint: [2, 3, 2, 4, 2, 2, 1],
   },
   {
     id: "p-portal",
@@ -134,6 +136,7 @@ export const projects: Project[] = [
     due: day(16),
     lastUpdated: hoursAgo(5),
     tag: "Infrastructure",
+    sprint: [1, 2, 1, 2, 1, 1, 1],
   },
   {
     id: "p-mkt",
@@ -148,6 +151,7 @@ export const projects: Project[] = [
     due: day(-6),
     lastUpdated: hoursAgo(6 * 24),
     tag: "Marketing",
+    sprint: [3, 5, 4, 7, 3, 5, 4],
   },
 ];
 

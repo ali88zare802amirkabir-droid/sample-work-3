@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 
 const FILTERS: Array<{ key: TaskStatus | "all"; label: string }> = [
   { key: "all", label: "All" },
+  { key: "backlog", label: "Backlog" },
   { key: "todo", label: "To Do" },
   { key: "in-progress", label: "In Progress" },
   { key: "review", label: "In Review" },

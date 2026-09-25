@@ -82,7 +82,7 @@ export function TaskCard({ taskId }: { taskId: string }) {
                   toggle();
                 }}
                 className={cn(
-                  "rounded-md p-1 text-ink-3 opacity-0 transition-opacity hover:bg-surface-2 hover:text-ink group-hover:opacity-100",
+                  "rounded-md p-1 text-ink-3 transition-opacity hover:bg-surface-2 hover:text-ink lg:opacity-0 lg:group-hover:opacity-100",
                   o && "opacity-100"
                 )}
                 aria-label="Move task"

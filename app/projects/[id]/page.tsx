@@ -57,7 +57,9 @@ function ProjectDetail({ projectId }: { projectId: string }) {
   const open = projectTasks.filter((t) => t.status !== "done").length;
   const done = projectTasks.filter((t) => t.status === "done").length;
   const status = projectStatusMeta[project.status];
-  const projectActivity = activities.filter((a) => a.projectId === project.id);
+  const projectActivity = activities
+    .filter((a) => a.projectId === project.id)
+    .sort((a, b) => b.at.localeCompare(a.at));
 
   return (
     <div className="space-y-5">
@@ -225,7 +227,7 @@ function ProjectDetail({ projectId }: { projectId: string }) {
               </div>
             </div>
 
-            <SprintChart />
+            <SprintChart projectId={project.id} />
           </div>
 
           <div className="flex flex-col gap-4">
