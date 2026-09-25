@@ -1,0 +1,738 @@
+import type {
+  Activity,
+  Member,
+  Priority,
+  Project,
+  ProjectStatus,
+  Task,
+  TaskStatus,
+} from "@/lib/types";
+
+export const CURRENT_USER_ID = "m-ali";
+
+function addDays(n: number, hour = 12): Date {
+  const d = new Date();
+  d.setHours(hour, 0, 0, 0);
+  d.setDate(d.getDate() + n);
+  return d;
+}
+
+function day(n: number): string {
+  const d = addDays(n);
+  return d.toISOString().slice(0, 10);
+}
+
+function hoursAgo(n: number): string {
+  return new Date(Date.now() - n * 3600_000).toISOString();
+}
+
+export const members: Member[] = [
+  {
+    id: "m-ali",
+    name: "Ali Rezaei",
+    role: "Product Manager",
+    status: "online",
+    gradient: "from-blue-500 to-cyan-400",
+    email: "ali@nexaboard.dev",
+    bio: "Product lead. Turns messy workflows into quiet, focused software.",
+  },
+  {
+    id: "m-sara",
+    name: "Sara Mohammadi",
+    role: "Product Designer",
+    status: "online",
+    gradient: "from-violet-500 to-fuchsia-400",
+    email: "sara@nexaboard.dev",
+    bio: "Designs interfaces that feel calm, consistent and considered.",
+  },
+  {
+    id: "m-reza",
+    name: "Reza Karimi",
+    role: "Backend Engineer",
+    status: "away",
+    gradient: "from-emerald-500 to-teal-400",
+    email: "reza@nexaboard.dev",
+    bio: "Keeps APIs fast, types strict and pipelines green.",
+  },
+  {
+    id: "m-mina",
+    name: "Mina Ahmadi",
+    role: "Frontend Engineer",
+    status: "online",
+    gradient: "from-rose-500 to-pink-400",
+    email: "mina@nexaboard.dev",
+    bio: "Builds the interfaces the rest of the team can't stop clicking.",
+  },
+  {
+    id: "m-arman",
+    name: "Arman Hosseini",
+    role: "DevOps & QA",
+    status: "offline",
+    gradient: "from-amber-500 to-orange-400",
+    email: "arman@nexaboard.dev",
+    bio: "Deploys it, watches it, and finds the bugs before users do.",
+  },
+  {
+    id: "m-nilo",
+    name: "Niloofar Ebrahimi",
+    role: "Content Designer",
+    status: "online",
+    gradient: "from-indigo-500 to-blue-400",
+    email: "niloofar@nexaboard.dev",
+    bio: "Writes copy that ships and ships copy that writes.",
+  },
+  {
+    id: "m-kasra",
+    name: "Kasra Abbasi",
+    role: "Mobile Engineer",
+    status: "away",
+    gradient: "from-cyan-500 to-sky-400",
+    email: "kasra@nexaboard.dev",
+    bio: "Makes both app stores happy and the bundle small.",
+  },
+];
+
+export const projects: Project[] = [
+  {
+    id: "p-nexa",
+    name: "Nexa Mobile App",
+    description:
+      "Flagship iOS & Android app that turns messy project tracking into a calm, focused workspace.",
+    status: "active",
+    progress: 78,
+    gradient: "from-blue-500 to-cyan-400",
+    memberIds: ["m-ali", "m-sara", "m-reza", "m-mina", "m-kasra", "m-nilo", "m-arman"],
+    start: day(-48),
+    due: day(21),
+    lastUpdated: hoursAgo(2),
+    tag: "Product",
+  },
+  {
+    id: "p-vortex",
+    name: "Vortex Website",
+    description:
+      "Marketing site redesign with a fast landing experience, CMS-driven content and dark theme polish.",
+    status: "active",
+    progress: 54,
+    gradient: "from-violet-500 to-fuchsia-400",
+    memberIds: ["m-sara", "m-nilo", "m-mina"],
+    start: day(-30),
+    due: day(9),
+    lastUpdated: hoursAgo(26),
+    tag: "Marketing",
+  },
+  {
+    id: "p-portal",
+    name: "Client Portal",
+    description:
+      "Secure customer area with document previews, role-based access and single sign-on.",
+    status: "at-risk",
+    progress: 32,
+    gradient: "from-amber-500 to-orange-400",
+    memberIds: ["m-reza", "m-arman", "m-kasra"],
+    start: day(-20),
+    due: day(16),
+    lastUpdated: hoursAgo(5),
+    tag: "Infrastructure",
+  },
+  {
+    id: "p-mkt",
+    name: "Marketing Website",
+    description:
+      "Brand microsite and campaign pages produced for the most recent product launch.",
+    status: "completed",
+    progress: 100,
+    gradient: "from-emerald-500 to-teal-400",
+    memberIds: ["m-sara", "m-nilo"],
+    start: day(-60),
+    due: day(-6),
+    lastUpdated: hoursAgo(6 * 24),
+    tag: "Marketing",
+  },
+];
+
+export const projectStatusMeta: Record<
+  ProjectStatus,
+  { label: string; tone: string }
+> = {
+  active: { label: "On track", tone: "ok" },
+  "at-risk": { label: "At risk", tone: "danger" },
+  completed: { label: "Completed", tone: "info" },
+};
+
+export const tasks: Task[] = [
+  {
+    id: "t-101",
+    title: "Design the onboarding flow",
+    description:
+      "Map the first-run experience: welcome, workspace setup and an invite screen. Keep it under three steps and reuse the existing design system.",
+    projectId: "p-nexa",
+    status: "todo",
+    priority: "high",
+    assigneeId: "m-sara",
+    due: day(2),
+    label: "Design",
+    points: 5,
+    checklist: [
+      { id: "c1", label: "Low-fi wireframes for three variants", done: true },
+      { id: "c2", label: "High-fi screens in Figma", done: true },
+      { id: "c3", label: "Hand-off spec for the app team", done: false },
+    ],
+    comments: [
+      {
+        id: "cm1",
+        authorId: "m-ali",
+        body: "We should reuse the bottom-sheet pattern from the empty-state screens here.",
+        at: hoursAgo(20),
+      },
+      {
+        id: "cm2",
+        authorId: "m-sara",
+        body: "Agreed. I'll batch the hand-off spec tonight.",
+        at: hoursAgo(6),
+      },
+    ],
+    createdAt: hoursAgo(72),
+    updatedAt: hoursAgo(6),
+  },
+  {
+    id: "t-102",
+    title: "Set up OAuth authentication",
+    description:
+      "Wire Google + GitHub sign-in through the auth service with token refresh and a proper logout handshake.",
+    projectId: "p-nexa",
+    status: "in-progress",
+    priority: "urgent",
+    assigneeId: "m-reza",
+    due: day(1),
+    label: "Auth",
+    points: 8,
+    checklist: [
+      { id: "c1", label: "Configure OAuth providers", done: true },
+      { id: "c2", label: "Token refresh loop", done: false },
+      { id: "c3", label: "Session invalidation on logout", done: false },
+    ],
+    comments: [
+      {
+        id: "cm1",
+        authorId: "m-mina",
+        body: "The app side needs the redirect URL once you lock the callback route.",
+        at: hoursAgo(9),
+      },
+    ],
+    createdAt: hoursAgo(100),
+    updatedAt: hoursAgo(4),
+  },
+  {
+    id: "t-103",
+    title: "Build the project card component",
+    description:
+      "Card with progress ring, member avatars and a quick menu. Must reuse the shared avatar stack.",
+    projectId: "p-nexa",
+    status: "done",
+    priority: "medium",
+    assigneeId: "m-mina",
+    due: day(-1),
+    points: 3,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(130),
+    updatedAt: hoursAgo(30),
+  },
+  {
+    id: "t-104",
+    title: "Stripe payment integration",
+    description:
+      "Checkout, webhook handling and invoice generation for the first paid plan tier.",
+    projectId: "p-nexa",
+    status: "review",
+    priority: "high",
+    assigneeId: "m-reza",
+    due: day(4),
+    label: "Billing",
+    points: 8,
+    checklist: [
+      { id: "c1", label: "Checkout session creation", done: true },
+      { id: "c2", label: "Webhook signature verification", done: true },
+      { id: "c3", label: "Sandbox invoice tests", done: false },
+    ],
+    comments: [
+      {
+        id: "cm1",
+        authorId: "m-ali",
+        body: "Looks solid. Check the webhook retry policy before we merge.",
+        at: hoursAgo(3),
+      },
+    ],
+    createdAt: hoursAgo(200),
+    updatedAt: hoursAgo(3),
+  },
+  {
+    id: "t-105",
+    title: "Push notifications for iOS & Android",
+    description:
+      "APNs + FCM channels with per-project mute preferences surfaced in settings.",
+    projectId: "p-nexa",
+    status: "backlog",
+    priority: "medium",
+    assigneeId: "m-kasra",
+    due: day(7),
+    label: "Mobile",
+    points: 5,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(50),
+    updatedAt: hoursAgo(50),
+  },
+  {
+    id: "t-106",
+    title: "Analytics dashboard charts",
+    description:
+      "Weekly velocity, task distribution and a burn-down that updates without a full reload.",
+    projectId: "p-nexa",
+    status: "in-progress",
+    priority: "medium",
+    assigneeId: "m-mina",
+    due: day(3),
+    label: "Analytics",
+    points: 5,
+    checklist: [
+      { id: "c1", label: "Velocity bars", done: true },
+      { id: "c2", label: "Status distribution donut", done: false },
+    ],
+    comments: [],
+    createdAt: hoursAgo(90),
+    updatedAt: hoursAgo(12),
+  },
+  {
+    id: "t-107",
+    title: "Localize to Farsi",
+    description:
+      "Full Farsi localization including RTL layout pass for the settings screens.",
+    projectId: "p-nexa",
+    status: "backlog",
+    priority: "low",
+    assigneeId: "m-nilo",
+    due: day(12),
+    label: "Localization",
+    points: 3,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(24),
+    updatedAt: hoursAgo(24),
+  },
+  {
+    id: "t-108",
+    title: "Dark mode polish pass",
+    description:
+      "Reduce glow on accent surfaces, align surface contrast and check focus rings.",
+    projectId: "p-nexa",
+    status: "review",
+    priority: "low",
+    assigneeId: "m-sara",
+    due: day(1),
+    label: "Design",
+    points: 2,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(60),
+    updatedAt: hoursAgo(7),
+  },
+  {
+    id: "t-109",
+    title: "App store screenshots",
+    description:
+      "Five-shot set for both stores at 6.7” and 6.1” with the localized copy overlays.",
+    projectId: "p-nexa",
+    status: "backlog",
+    priority: "medium",
+    assigneeId: "m-nilo",
+    due: day(6),
+    label: "Assets",
+    points: 3,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(40),
+    updatedAt: hoursAgo(40),
+  },
+  {
+    id: "t-110",
+    title: "API rate limiting",
+    description:
+      "Per-key rate limiting with burst allowances and clear 429 response headers.",
+    projectId: "p-nexa",
+    status: "done",
+    priority: "urgent",
+    assigneeId: "m-reza",
+    due: day(-2),
+    label: "API",
+    points: 5,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(150),
+    updatedAt: hoursAgo(36),
+  },
+  {
+    id: "t-111",
+    title: "Bug: profile photo upload",
+    description:
+      "Uploads over 4MB time out on mobile data. Downscale client-side before upload.",
+    projectId: "p-nexa",
+    status: "in-progress",
+    priority: "high",
+    assigneeId: "m-mina",
+    due: day(0),
+    label: "Bug",
+    points: 3,
+    checklist: [],
+    comments: [
+      {
+        id: "cm1",
+        authorId: "m-arman",
+        body: "Reproduced on a mid-range Android with 5MB image.",
+        at: hoursAgo(8),
+      },
+    ],
+    createdAt: hoursAgo(30),
+    updatedAt: hoursAgo(2),
+  },
+  {
+    id: "t-112",
+    title: "Sprint 14 retro notes",
+    description:
+      "Collect and summarize feedback from the team retro into next-sprint action items.",
+    projectId: "p-nexa",
+    status: "done",
+    priority: "low",
+    assigneeId: "m-ali",
+    due: day(-3),
+    points: 2,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(160),
+    updatedAt: hoursAgo(24),
+  },
+  {
+    id: "t-201",
+    title: "Homepage hero redesign",
+    description:
+      "New hero with product mockup, animated gradient ring and a single CTA. Keep the dark theme first.",
+    projectId: "p-vortex",
+    status: "review",
+    priority: "high",
+    assigneeId: "m-sara",
+    due: day(2),
+    label: "Design",
+    points: 5,
+    checklist: [
+      { id: "c1", label: "Hero variant A", done: true },
+      { id: "c2", label: "Motion pass", done: true },
+      { id: "c3", label: "Accessibility check", done: false },
+    ],
+    comments: [],
+    createdAt: hoursAgo(120),
+    updatedAt: hoursAgo(10),
+  },
+  {
+    id: "t-202",
+    title: "Content migration to CMS",
+    description:
+      "Move all home, pricing and blog copy into structured CMS entries.",
+    projectId: "p-vortex",
+    status: "in-progress",
+    priority: "medium",
+    assigneeId: "m-nilo",
+    due: day(5),
+    points: 5,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(80),
+    updatedAt: hoursAgo(20),
+  },
+  {
+    id: "t-203",
+    title: "SEO meta audit",
+    description:
+      "Check titles, descriptions, Open Graph and structured data across all templates.",
+    projectId: "p-vortex",
+    status: "todo",
+    priority: "medium",
+    assigneeId: "m-arman",
+    due: day(3),
+    label: "SEO",
+    points: 3,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(30),
+    updatedAt: hoursAgo(30),
+  },
+  {
+    id: "t-204",
+    title: "Contact form validation",
+    description:
+      "Client-side validation, honeypot and a friendly error state for the contact form.",
+    projectId: "p-vortex",
+    status: "done",
+    priority: "medium",
+    assigneeId: "m-mina",
+    due: day(-1),
+    points: 2,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(100),
+    updatedAt: hoursAgo(40),
+  },
+  {
+    id: "t-205",
+    title: "Deploy staging environment",
+    description:
+      "Preview deployments per branch with a shared staging domain for client review.",
+    projectId: "p-vortex",
+    status: "backlog",
+    priority: "medium",
+    assigneeId: "m-arman",
+    due: day(4),
+    label: "DevOps",
+    points: 3,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(15),
+    updatedAt: hoursAgo(15),
+  },
+  {
+    id: "t-301",
+    title: "SSO integration",
+    description:
+      "Connect the portal to the customer identity provider with SCIM provisioning.",
+    projectId: "p-portal",
+    status: "in-progress",
+    priority: "urgent",
+    assigneeId: "m-reza",
+    due: day(3),
+    label: "Auth",
+    points: 8,
+    checklist: [
+      { id: "c1", label: "SAML metadata import", done: true },
+      { id: "c2", label: "SCIM user sync", done: false },
+    ],
+    comments: [],
+    createdAt: hoursAgo(70),
+    updatedAt: hoursAgo(5),
+  },
+  {
+    id: "t-302",
+    title: "Document previews",
+    description:
+      "In-browser preview for PDF and Office files with a signed URL expiry.",
+    projectId: "p-portal",
+    status: "todo",
+    priority: "high",
+    assigneeId: "m-kasra",
+    due: day(5),
+    points: 5,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(50),
+    updatedAt: hoursAgo(18),
+  },
+  {
+    id: "t-303",
+    title: "Role management",
+    description:
+      "Admin, editor and viewer roles with granular project permissions.",
+    projectId: "p-portal",
+    status: "backlog",
+    priority: "high",
+    assigneeId: "m-reza",
+    due: day(9),
+    points: 8,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(36),
+    updatedAt: hoursAgo(36),
+  },
+  {
+    id: "t-304",
+    title: "Audit trail log",
+    description:
+      "Append-only log of portal actions with a CSV export for compliance.",
+    projectId: "p-portal",
+    status: "done",
+    priority: "medium",
+    assigneeId: "m-arman",
+    due: day(-2),
+    points: 4,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(90),
+    updatedAt: hoursAgo(22),
+  },
+  {
+    id: "t-401",
+    title: "Landing page copy",
+    description:
+      "Headlines, value props and the final FAQ section for the launch microsite.",
+    projectId: "p-mkt",
+    status: "done",
+    priority: "high",
+    assigneeId: "m-sara",
+    due: day(-6),
+    points: 5,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(24 * 5),
+    updatedAt: hoursAgo(24 * 3),
+  },
+  {
+    id: "t-402",
+    title: "OG image set",
+    description:
+      "Shared social cards with brand gradient and the new wordmark.",
+    projectId: "p-mkt",
+    status: "done",
+    priority: "low",
+    assigneeId: "m-nilo",
+    due: day(-4),
+    points: 2,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(24 * 6),
+    updatedAt: hoursAgo(24 * 4),
+  },
+  {
+    id: "t-403",
+    title: "Case study section",
+    description:
+      "Three customer stories with metrics pulled from the launch report.",
+    projectId: "p-mkt",
+    status: "done",
+    priority: "medium",
+    assigneeId: "m-sara",
+    due: day(-2),
+    points: 5,
+    checklist: [],
+    comments: [],
+    createdAt: hoursAgo(24 * 4),
+    updatedAt: hoursAgo(24 * 2),
+  },
+];
+
+export const activities: Activity[] = [
+  {
+    id: "a1",
+    kind: "task-moved",
+    actorId: "m-ali",
+    text: "moved API rate limiting to Review",
+    at: hoursAgo(2),
+    projectId: "p-nexa",
+  },
+  {
+    id: "a2",
+    kind: "comment",
+    actorId: "m-mina",
+    text: "commented on Bug: profile photo upload",
+    at: hoursAgo(3),
+    projectId: "p-nexa",
+  },
+  {
+    id: "a3",
+    kind: "task-completed",
+    actorId: "m-sara",
+    text: "completed Contact form validation",
+    at: hoursAgo(4),
+    projectId: "p-vortex",
+  },
+  {
+    id: "a4",
+    kind: "progress",
+    actorId: "m-ali",
+    text: "updated project progress to 78%",
+    at: hoursAgo(6),
+    projectId: "p-nexa",
+  },
+  {
+    id: "a5",
+    kind: "task-created",
+    actorId: "m-reza",
+    text: "created a new task · Push notifications for iOS & Android",
+    at: hoursAgo(9),
+    projectId: "p-nexa",
+  },
+  {
+    id: "a6",
+    kind: "member",
+    actorId: "m-nilo",
+    text: "joined the Nexa Mobile App workspace",
+    at: hoursAgo(26),
+    projectId: "p-nexa",
+  },
+  {
+    id: "a7",
+    kind: "task-moved",
+    actorId: "m-sara",
+    text: "moved Homepage hero redesign to Review",
+    at: hoursAgo(10),
+    projectId: "p-vortex",
+  },
+  {
+    id: "a8",
+    kind: "task-completed",
+    actorId: "m-arman",
+    text: "completed Audit trail log",
+    at: hoursAgo(22),
+    projectId: "p-portal",
+  },
+  {
+    id: "a9",
+    kind: "task-created",
+    actorId: "m-mina",
+    text: "created a new task · Dark mode polish pass",
+    at: hoursAgo(40),
+    projectId: "p-nexa",
+  },
+  {
+    id: "a10",
+    kind: "progress",
+    actorId: "m-reza",
+    text: "moved the Client Portal from Backlog to In Progress",
+    at: hoursAgo(28),
+    projectId: "p-portal",
+  },
+];
+
+export const priorityMeta: Record<
+  Priority,
+  { label: string; dot: string; text: string }
+> = {
+  urgent: { label: "Urgent", dot: "bg-danger", text: "text-danger" },
+  high: { label: "High", dot: "bg-warn", text: "text-warn" },
+  medium: { label: "Medium", dot: "bg-accent", text: "text-accent" },
+  low: { label: "Low", dot: "bg-ink-3", text: "text-ink-3" },
+};
+
+export const taskStatusMeta: Record<
+  TaskStatus,
+  { label: string; dot: string; accent: string }
+> = {
+  backlog: { label: "Backlog", dot: "bg-ink-3", accent: "text-ink-3" },
+  todo: { label: "To Do", dot: "bg-info", accent: "text-info" },
+  "in-progress": { label: "In Progress", dot: "bg-accent", accent: "text-accent" },
+  review: { label: "In Review", dot: "bg-warn", accent: "text-warn" },
+  done: { label: "Done", dot: "bg-ok", accent: "text-ok" },
+};
+
+export const COLUMN_ORDER: TaskStatus[] = [
+  "backlog",
+  "todo",
+  "in-progress",
+  "review",
+  "done",
+];
+
+export function getMember(id: string): Member {
+  return members.find((m) => m.id === id) ?? members[0];
+}
+
+export function getProject(id: string): Project {
+  return projects.find((p) => p.id === id) ?? projects[0];
+}
