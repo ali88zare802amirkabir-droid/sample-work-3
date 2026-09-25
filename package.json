@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "NexaBoard — a polished project-management UI demo built for a software-development portfolio.",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
